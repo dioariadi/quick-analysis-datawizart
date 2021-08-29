@@ -1,0 +1,162 @@
+---
+title: "vaksin_dumbbell"
+author: "Dio"
+date: "8/25/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r librar}
+library(tidyverse)
+# library(ggdist)
+library(ggalt)
+# library(ggrepel)
+library(ggtext)
+```
+
+
+```{r data}
+
+covid_vaccine <-as_tibble(data.frame(vaccine = c("Sinovac & Sinopharm","AstraZeneca","Moderna","Pfizer"),
+          bergejala_1 = c(0.59,0.60,0.506,0.524),
+          bergejala_2 = c(0.59,0.67,0.848,0.88),
+          rawatInap_1 = c(0.695,0.92,0.81,0.75),
+          rawatInap_2 = c(0.702,0.92,0.96,0.96))) %>% 
+  pivot_longer(cols = 2:5,names_to = "metric") %>% 
+    separate(metric,c("mencegah","level"),sep = "_") %>% 
+    pivot_wider(names_from = level,values_from = value) %>% 
+  rename("first"=`1`,"second"=`2`) %>% 
+  mutate(mencegah = case_when(mencegah == "bergejala" ~"Mencegah Bergejala",
+                              mencegah == "rawatInap" ~ "Mencegah Rawat Inap"),
+         label_ = paste(vaccine,mencegah),
+         text_label_1 = case_when(vaccine == "Sinovac & Sinopharm"  ~ paste(as.character((first*100)),"%",sep = ""),
+                                  TRUE ~ as.character((first)*100)),
+         text_label_2 = case_when(vaccine == "Sinovac & Sinopharm"  ~ paste(as.character((second*100)),"%",sep = ""),
+                                  TRUE ~ as.character((second)*100)),
+         line_1_end = first-0.1,
+         line_2_start = second + 0.1,
+         line_1_end = case_when(vaccine == "Sinovac & Sinopharm" & mencegah=="Mencegah Bergejala" ~ line_1_end +0.03,
+                                vaccine == "Sinovac & Sinopharm" & mencegah=="Mencegah Rawat Inap" ~ line_1_end -0.03,
+                                vaccine == "AstraZeneca" | (vaccine %in% c("Pfizer","Moderna") & mencegah=="Rawat Inap") ~ line_1_end +0.03,
+                                TRUE ~ line_1_end
+                                ),
+         line_2_start = case_when(vaccine == "Sinovac & Sinopharm" & mencegah=="Mencegah Bergejala" ~ line_2_start -0.03,
+                                vaccine == "Sinovac & Sinopharm" & mencegah=="Mencegah Rawat Inap" ~ line_2_start +0.03,
+                                vaccine == "AstraZeneca" | (vaccine %in% c("Pfizer","Moderna") & mencegah=="Mencegah Rawat Inap") ~ line_2_start -0.03,
+                                TRUE ~ line_2_start
+                                )
+         )
+  
+    
+
+# View(covid_vaccine)
+
+```
+
+
+```{r}
+percent_first <- function(x) {
+  x <- sprintf("%d%%", round(x*100))
+  x[2:length(x)] <- sub("%$", "", x[2:length(x)])
+  x
+}
+blue <- "#0171CE"
+red <- "#DE4433"
+```
+
+
+```{r graph}
+graph_vaccine <- ggplot()+
+  ## start line
+  geom_segment(data=covid_vaccine, aes(y=vaccine, yend=vaccine, x=0, xend=line_1_end), color="#b2b2b2", size=0.15)+
+  ## end line
+  geom_segment(data=covid_vaccine, aes(y=vaccine, yend=vaccine, x=line_2_start, xend=1.15), color="#b2b2b2", size=0.15)+
+  ## dumbbell
+  geom_dumbbell(data = covid_vaccine, aes(y = vaccine,x=first,xend=second),
+                colour_x = "#2FC1B9",colour_xend = "#197770",color="#e3e2e1", size=2) +
+  
+  facet_wrap(~mencegah,nrow = 2)+
+  scale_x_continuous(labels = scales::percent,expand=c(0,0), limits=c(0, 1.175))+
+  ## text label
+  geom_text(data=(covid_vaccine %>% filter((vaccine=="Sinovac & Sinopharm" & mencegah=="Mencegah Bergejala") |
+                                             (vaccine=="AstraZeneca" & mencegah=="Mencegah Rawat Inap"))), 
+            aes(x=first, y=vaccine, label=(text_label_1)),
+          color="#197770", size=2.75, vjust=2.5)+
+  geom_text(data=(covid_vaccine %>% filter(!(vaccine=="Sinovac & Sinopharm" & mencegah=="Mencegah Bergejala")&
+                                             !(vaccine=="AstraZeneca" & mencegah=="Mencegah Rawat Inap") )), 
+            aes(x=first, y=vaccine, label=(text_label_1)),
+          color="#2FC1B9", size=2.75, hjust=1.8)+
+  geom_text(data=(covid_vaccine %>% filter(first !=second)), aes(x=second, y=vaccine, label=(text_label_2)),
+          color="#197770", size=2.75, hjust=-.8)+theme_bw()+
+  theme(
+  # text = element_text(family = "Open Sans"),
+  panel.grid.major=element_blank(),
+  panel.grid.minor=element_blank(),
+  panel.border=element_blank(),
+  axis.ticks=element_blank(),
+  axis.text.x=element_blank(),
+  axis.text.y.left = element_text(size=10),
+  plot.title=element_text(size = 14, face="bold"),
+  plot.title.position = "plot",
+  plot.subtitle=element_text(size=12),
+  plot.caption=element_text(size=8, margin=margin(t=12), color="#7a7d7e"),
+  strip.background = element_blank(),
+  strip.text = element_textbox(
+      size = 10,
+      color = "white", fill = "#2FC1B9", box.color = NULL,
+      halign = 0.5, linetype = 1, r = unit(2, "pt"), width = unit(1, "npc"),
+      padding = margin(2, 0, 1, 0), margin = margin(3, 3, 3, 3)
+    )
+)+
+  labs(x=NULL, y=NULL, title="Efektivitas Vaksin Covid-19 terhadap varian Delta",
+       subtitle="Untuk jenis vaksin yang tersedia di Indonesia",
+       caption="Sumber ringkasan dari @adamprabata | https://www.instagram.com/p/CS_ddQ_BghY/
+                Grafik dibuat oleh @data_wizart | Dio Ariadi")
+
+
+graph_vaccine
+# ggsave(graph_vaccine,device = "pdf",path = "~/Documents/graph_covid.pdf")
+
+# ggsave("graph_covid.pdf",width = 960,height = 1050,units = "px")
+
+#  Sinovac & Sinopharm(Li, 2021;Kang, 2021)
+# 
+# AstraZeneca (Stowe, 2021; Sheikh, 2021; Bernal, 2021; PHE)
+# 
+# Moderna (Nasreen, 2021; Nanduri, 2021; Tang, 2021; Punarik, 2021)
+# 
+# Pfizer (Stowe, 2021; Sheikh, 2021; Bernal, 2021; PHE; Nasreen, 2021; Nanduri, 2021)
+```
+
+
+```{r}
+set.seed(1234)
+df = tribble(
+    ~group, ~subgroup, ~value,
+    "a",          "h", rnorm(1000, mean = 5),
+    "b",          "h", rnorm(1000, mean = 7, sd = 1.5),
+    "c",          "h", rnorm(1000, mean = 8),
+    "c",          "i", rnorm(1000, mean = 9),
+    "c",          "j", rnorm(1000, mean = 7)
+  ) %>%
+  unnest(value)
+
+df %>%
+  ggplot(aes(x = group, y = value, fill = subgroup)) +
+  stat_gradientinterval(position = "dodge") +
+  labs(title = "stat_gradientinterval(position = 'dodge')")
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
