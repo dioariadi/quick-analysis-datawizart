@@ -1,7 +1,6 @@
 <center>
 
-<a href="https://journal.revou.co/happiness-index-perusahaan-teknologi/"><img src="revou.png"></a>
-
+<img src="revoU.png" style="display: block; margin: auto;" />
 Full Image please visit
 <https://journal.revou.co/happiness-index-perusahaan-teknologi/>
 </center>
