@@ -1,8 +1,7 @@
 <center>
 
 <img src="revoU.png" style="display: block; margin: auto;" />
-Full Image please visit
-<https://journal.revou.co/happiness-index-perusahaan-teknologi/>
+Full Image please visit https://journal.revou.co/happiness-index-perusahaan-teknologi/
 </center>
 
 For a context this image was created by revoU to know which companies
@@ -14,7 +13,7 @@ While the data is interesting in term visual it uses incorrect chart and
 the goal here to suggest a possible way to show the data with different
 chart, also provide the code so everyone can reproduce it.
 
-What’s the problem with the chart?
+### What’s the problem with the chart?
 
 The problem appeared when the chart that being used is stacked bar.
 Index from two different data source should not be merged into single
@@ -24,7 +23,7 @@ seems Dana had a higher rating for Jobstreet if we ignore the label.
 Above example means the x-axis for the chart would be double from
 maximum five into 10.
 
-What could be solution?
+### What could be solution?
 
 1.  If the goal is to show two different index then dumbbell chart could
     be solution. It shows the value for both Jobstreet and Glassdoor and
