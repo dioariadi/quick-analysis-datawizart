@@ -112,7 +112,7 @@ final_plot +
     geom = "text", x = 3.7, y = 23,label="Glassdoor & Jobstreet\nmemiliki nilai sama",size=2.5)
 ```
 
-<img src="Revamp-chart-happiness-index-revou_files/figure-markdown_github/geom dumbbell-1.png" style="display: block; margin: auto;" />
+<img src="geom dumbbell-1.png" style="display: block; margin: auto;" />
 
 ### Scatterplot
 
@@ -164,4 +164,4 @@ Glassdoor & Jobstreet"),size=2.3)+
 scatter
 ```
 
-![](Revamp-chart-happiness-index-revou_files/figure-markdown_github/scatterplot-1.png)
+![](scatterplot-1.png)
