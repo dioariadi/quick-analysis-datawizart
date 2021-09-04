@@ -1,0 +1,39 @@
+no,companies,linkedin_page,glassdoor_rating,jobstreet_rating,total_review_gd,total_review_js,total_review,avg_rating,categories,categories_group,funding,million
+1,Payfazz,https://www.linkedin.com/company/payfazz/,4.6,4.8,11,12,23,4.699999999999999,Fintech,Fintech,B,74.1
+2,HappyFresh,https://www.linkedin.com/company/happyfresh/,4.6,4.7,45,18,63,4.65,"Internet, Grocery",Ecommerce,D,65
+3,DANA,https://www.linkedin.com/company/dana-indonesia/,4.6,4.6,23,5,28,4.6,Fintech,Fintech,NA,NA
+4,Mekari,https://www.linkedin.com/company/mekari/,4.5,4.6,28,69,97,4.55,Information Technology & Services,Other,D,18
+5,Tiket,https://www.linkedin.com/company/pt-global-tiket-network/,4.5,4.6,41,33,74,4.55,Ticket,Ticket,NA,1
+6,Alodokter,https://www.linkedin.com/company/alodokter/,4.6,4.4,17,39,56,4.5,Healthy,Healthy,C,45.1
+7,Tokopedia,https://www.linkedin.com/company/pt--tokopedia/,4.4,4.5,264,241,505,4.45,Ecommerce,Ecommerce,B,2800
+8,Moka,https://www.linkedin.com/company/mokapos/,4.6,4.3,70,43,113,4.449999999999999,POS,Other,NA,27.9
+9,HarukaEdu,https://www.linkedin.com/company/haruka-evolusi-digital-utama/,4.6,4.3,5,21,26,4.449999999999999,Education,Education,NA,2.2
+10,GoJek,https://www.linkedin.com/company/gojek/,4.3,4.5,189,245,434,4.4,Super App,Super App,NA,5300
+11,Quipper,https://www.linkedin.com/company/quipper-limited/,4.6,4.2,10,50,60,4.4,Education,Education,NA,10.1
+12,Grab,https://www.linkedin.com/company/grabapp/,4.3,4.4,55,302,357,4.35,Super App,Super App,NA,12500
+13,Zalora,https://www.linkedin.com/company/zalora-sea/,4.5,4.2,15,50,65,4.35,Ecommerce,Ecommerce,NA,238
+14,Bukalapak,https://www.linkedin.com/company/pt-bukalapak-com/,4.2,4.4,183,140,323,4.300000000000001,Ecommerce,Ecommerce,NA,784.1
+15,Traveloka,https://www.linkedin.com/company/traveloka-com/,4.2,4.4,177,44,221,4.300000000000001,Ticket,Ticket,NA,1200
+16,Ruangguru,https://www.linkedin.com/company/ruangguru-com/,4.3,4.3,41,69,110,4.3,Education,Education,NA,205.1
+17,Kredivo,https://www.linkedin.com/company/finaccel-pte-ltd/,4.6,4,5,6,11,4.3,Fintech,Fintech,NA,310
+18,Blibli,https://www.linkedin.com/company/bliblidotcom/,4,4.5,75,133,208,4.25,Ecommerce,Ecommerce,NA,NA
+19,PegiPegi,https://www.linkedin.com/company/pegipegi/,4,4.5,11,33,44,4.25,Ticket,Ticket,NA,NA
+20,Fore Coffee,https://www.linkedin.com/company/fore-coffee/,3.8,4.7,5,12,17,4.25,FnB,Other,NA,39.5
+21,Shopee,https://www.linkedin.com/company/shopee/,4,4.4,122,173,295,4.2,Ecommerce,Ecommerce,NA,NA
+22,OVO,https://www.linkedin.com/company/visionetinternasional/,4,4.4,22,58,80,4.2,Fintech,Fintech,NA,NA
+23,Amartha,https://www.linkedin.com/company/amartha/,4,4.3,6,24,30,4.15,Fintech,Fintech,NA,NA
+24,Lazada,https://www.linkedin.com/company/lazada/,4.2,4,68,140,208,4.1,Ecommerce,Ecommerce,NA,NA
+25,Zenius,https://www.linkedin.com/company/pt-zenius-education/,3.7,4.5,10,8,18,4.1,Education,Education,NA,NA
+26,Cermati,https://www.linkedin.com/company/cermati/,4.4,3.7,20,23,43,4.050000000000001,Fintech,Fintech,NA,NA
+27,Berrybenka,https://www.linkedin.com/company/berrybenka-com/,3.9,4.1,6,76,82,4,Ecommerce,Ecommerce,NA,NA
+28,Bizzy,https://www.linkedin.com/company/bizzy-indonesia/,3.9,4.1,22,29,51,4,Logistic,Other,NA,NA
+29,Bhinneka,https://www.linkedin.com/company/bhinneka-com/,3.8,4,13,79,92,3.9,Ecommerce,Ecommerce,NA,NA
+30,Halodoc ID,https://www.linkedin.com/company/m-health-tech/,3.4,4.4,12,30,42,3.9000000000000004,Healthy,Healthy,NA,NA
+31,JD.ID,https://www.linkedin.com/company/jd-id/,3.5,4.2,11,83,94,3.85,Ecommerce,Ecommerce,NA,NA
+32,Warung Pintar,https://www.linkedin.com/company/warungpintar/,3.5,4.1,16,14,30,3.8,SMR,Other,NA,NA
+33,Ralali,https://www.linkedin.com/company/ralali-com/,3.6,3.9,18,21,39,3.75,Ecommerce,Ecommerce,NA,NA
+34,Fabelio,https://www.linkedin.com/company/fabelio/,3.5,3.9,10,26,36,3.7,Other,Other,NA,NA
+35,Sociolla,https://www.linkedin.com/company/sociolla/,3.2,4.1,10,10,20,3.65,Other,Other,NA,NA
+36,OYO Indonesia,https://www.linkedin.com/company/oyo-indonesia/,3.3,3.9,44,85,129,3.5999999999999996,Hospitality,Other,NA,NA
+37,Uang Teman,https://www.linkedin.com/company/uangteman/,2.8,4.3,8,17,25,3.55,Fintech,Fintech,NA,NA
+38,Akulaku,https://www.linkedin.com/company/akulaku/,2.6,4,5,37,42,3.3,Fintech,Fintech,NA,NA
