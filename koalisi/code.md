@@ -1,0 +1,179 @@
+## Source of data
+
+[CNN](https://twitter.com/CNNIndonesia/status/1691328868974817280)
+
+``` r
+library(tidyverse) 
+```
+
+    ## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+    ## ✔ dplyr     1.1.2     ✔ readr     2.1.4
+    ## ✔ forcats   1.0.0     ✔ stringr   1.5.0
+    ## ✔ ggplot2   3.4.3     ✔ tibble    3.2.1
+    ## ✔ lubridate 1.9.2     ✔ tidyr     1.3.0
+    ## ✔ purrr     1.0.1     
+    ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+    ## ✖ dplyr::filter() masks stats::filter()
+    ## ✖ dplyr::lag()    masks stats::lag()
+    ## ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
+
+``` r
+library(waffle) 
+library(ggtext)
+library(ggimage)
+library(data.table)
+```
+
+    ## 
+    ## Attaching package: 'data.table'
+    ## 
+    ## The following objects are masked from 'package:lubridate':
+    ## 
+    ##     hour, isoweek, mday, minute, month, quarter, second, wday, week,
+    ##     yday, year
+    ## 
+    ## The following objects are masked from 'package:dplyr':
+    ## 
+    ##     between, first, last
+    ## 
+    ## The following object is masked from 'package:purrr':
+    ## 
+    ##     transpose
+
+## Create Dataset
+
+``` r
+df_calon <- bind_rows(
+  as_tibble(x = list(calon = "Prabowo Subianto",partai = c("Gerindra","PKB","Golkar","PAN","PBB"),
+                     kursi = c(78,58,85,44,0))),
+  as_tibble(x = list(calon = "Ganjar Pranowo",partai = c("PDIP","PPP","Perindo","Hanura","PSI"),
+                     kursi = c(128,19,0,0,0))),
+  as_tibble(x = list(calon = "Anies Baswedan",partai = c("Nasdem","Demokrat","PKS","UMMAT"),
+                     kursi = c(59,54,50,0)))
+) %>% mutate(calon = fct_relevel(calon,"Anies Baswedan","Prabowo Subianto"))
+
+df_calon <- df_calon %>% 
+  mutate(label_facet = case_when(calon =="Prabowo Subianto" ~ "<span style='color:grey'>Prabowo</span>",
+                                 calon=="Ganjar Pranowo" ~ "<span style='color:red'>Ganjar</span>",
+                                 calon=="Anies Baswedan" ~"<span style='color:blue'>Anies</span>"
+  )
+  ) %>% 
+  group_by(calon) %>% 
+  mutate(total_kursi = sum(kursi),
+         partai = fct_reorder(partai,-kursi),
+         row_ = row_number()) %>%
+  ungroup(calon) %>%
+  mutate(xlabel = 5.5,
+         ylabel= 
+          case_when(
+            partai == "Nasdem" ~ 3.5,
+            partai == "Demokrat" ~ 9,
+            partai == "PKS" ~ 14,
+            partai == "Golkar" ~ 4.5,
+            partai == "Gerindra" ~13.5,
+            partai == "PKB" ~ 20,
+            partai == "PAN" ~ 25,
+            partai == "PDIP" ~ 7.5,
+            partai == "PPP" ~ 14.5
+          ),
+        color_partai = 
+          case_when(
+            partai == "Nasdem" ~ "#061954",
+            partai == "Demokrat" ~ "#1f539c",
+            partai == "PKS" ~ "#f45716",
+            partai == "Golkar" ~ "#fcf227",
+            partai == "Gerindra" ~"#d71921" ,
+            partai == "PKB" ~ "#24764b",
+            partai == "PAN" ~ "#090581",
+            partai == "PDIP" ~ "#d61a23",
+            partai == "PPP" ~ "#1c6302"
+          )
+  )
+
+just=4.5
+
+df_image <- data.frame(
+  calon = c("Prabowo Subianto","Anies Baswedan","Ganjar Pranowo"),
+  x = 5.5,
+  yimg = c(29+just,19+just,17+just),
+  ytotal = c(29,19,17),
+  img = c("PRABOWO_SUBIANTO-fotor-20230823212112.png","anies_round.png","ganjar1-fotor-2023082321189.png"),
+  total_kursi = c(265,163,147),
+  x_logo=c(NA,1.3,0.5),
+  y_logo=c(NA,-1.5,-1.5),
+  img_logo =c(NA,"https://github.com/dioariadi/dioariadi.github.io/blob/master/images/2.png?raw=true",NA),
+  caption = c(NA,NA,"Sumber Data:<br> twitter.com/CNNIndonesia/status/1691328868974817280")
+)%>% mutate(calon = fct_relevel(calon,"Anies Baswedan","Prabowo Subianto"))
+
+df_non_kursi <- df_calon %>% filter(kursi==0) %>% 
+  mutate(ylabel= case_when(calon=="Prabowo Subianto"~28,
+                           calon=="Anies Baswedan"~18,
+                           calon=="Ganjar Pranowo"~16),x=case_when(partai=="UMMAT" ~5.5,
+                               partai=="PBB" ~ 5.5,
+                               partai=="Hanura" ~ 3.05,
+                               partai=="Perindo" ~5.5,
+                               partai=="PSI" ~ 7.5))
+# geom_wa 
+```
+
+## Create plot
+
+``` r
+setorder(df_calon, partai)
+# p1 <- 
+ggplot()+
+  ## waffle
+  geom_waffle(aes(fill=color_partai, values=kursi),color="white",na.rm = TRUE,flip = TRUE,data = df_calon,alpha=0.9,size=0.2,radius = unit(1, "pt"))+
+  ## total kursi
+  geom_text(aes(y=ytotal+0.5,x=5.5,label=paste("Total Kursi:",total_kursi)),data = df_image,family="Trebuchet MS")+
+  # kotak partai
+  geom_label(aes(y=ylabel,x=5.5,label=paste(partai,kursi),color=color_partai),data = df_calon,size=3.5,alpha=1,family="Trebuchet MS",show.legend = F)+
+  # tulisan partai biar item
+  geom_text(aes(y=ylabel,x=5.5,label=paste(partai,kursi)),color="black",data = df_calon,size=3.5,alpha=1,family="Trebuchet MS")+
+  geom_image(aes(x=x,y=yimg,image=img),data= df_image,size=0.18)+
+  ## partai tanpa kursi
+  geom_label(aes(y=ylabel,x=x,label=paste(partai)),fill="grey",data = df_non_kursi,size=3.5,alpha=1,family="Trebuchet MS")+
+  ## logo Datawizart
+  geom_image(data = filter(df_image,calon=="Anies Baswedan"),aes(x=x_logo,y=y_logo,image=img_logo),size=0.05)+
+  ## caption
+  geom_richtext(data = filter(df_image,calon=="Ganjar Pranowo"),aes(x=x_logo,y=y_logo,label=caption),size=3,family="Trebuchet MS",fill = NA, label.color = NA, # remove background and outline
+    label.padding = grid::unit(rep(0, 4), "pt"),hjust=0)+
+  facet_wrap(~calon,nrow=1)+
+  theme_minimal()+
+  labs(title = "Jumlah Kursi DPR Koalisi",
+       subtitle = "Komposisi koalisi dapat berubah | Satu kotak = satu kursi DPR<br>Recreated by Datawizart",
+       x=NULL,
+       y=NULL
+       # caption = "By Data Wizart<br> Sumber: twitter.com/CNNIndonesia/status/1691328868974817280"
+       )+
+  # scale_y_continuous(breaks = seq(-1, 37, by = 1))+
+  theme(
+    panel.grid = element_blank(),
+        axis.ticks = element_blank(),
+        axis.text = element_blank(),
+        axis.title = element_blank(),
+        strip.text.x = element_blank(),
+        plot.title = element_text(size=20,hjust = 0.5),
+        plot.subtitle = element_markdown(hjust = 0.5),
+        # plot.caption = element_markdown(),
+     # plot.margin = unit(c(0, 0, 0, 0), "null"),
+    # panel.margin = unit(c(0, 0, 0, 0), "null"),
+    # axis.ticks.length = unit(0, "null"),
+    # axis.ticks.margin = unit(0, "null"),
+        strip.text = ggtext::element_markdown(),text=element_text(family = "Trebuchet MS"))+
+  scale_fill_identity()+
+  scale_color_identity()+
+  # coord_equal()+
+  # ylim()
+  ylim(c(-1.5,36))
+```
+
+    ## Warning: Removed 5 rows containing missing values (`geom_label()`).
+
+    ## Warning: Removed 5 rows containing missing values (`geom_text()`).
+
+![](Jumlah-Kursi_DPR_files/figure-markdown_github/plot-1.png)
+
+``` r
+# ggsave("koalisi.png",width = 10,height = 10)
+```
