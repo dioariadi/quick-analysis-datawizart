@@ -172,7 +172,7 @@ ggplot()+
 
     ## Warning: Removed 5 rows containing missing values (`geom_text()`).
 
-![](Jumlah-Kursi_DPR_files/figure-markdown_github/plot-1.png)
+![](plot-1.png)
 
 ``` r
 # ggsave("koalisi.png",width = 10,height = 10)
